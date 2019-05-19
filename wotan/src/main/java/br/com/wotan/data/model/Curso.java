@@ -1,12 +1,12 @@
 package br.com.wotan.data.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+@AllArgsConstructor @NoArgsConstructor @Data
 public class Curso {
+	
 	private Long cursId;
 	private String cursNome;
 	

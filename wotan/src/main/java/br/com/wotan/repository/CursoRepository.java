@@ -40,9 +40,9 @@ public class CursoRepository extends BaseRepository{
 		}
 	}
 	
-	public Curso save(final Curso curso) {
+	public Curso insert(final Curso curso) {
 		try {
-			sql = SQLReader.from("sql" + File.separator + "geral" + File.separator + "insert" + File.separator + "cargo.sql");
+			sql = SQLReader.from("sql" + File.separator + "curso" + File.separator + "insert" + File.separator + "curso.sql");
 
 			KeyHolder holder = new GeneratedKeyHolder();
 			jdbcTemplateMySQL.update(new PreparedStatementCreator() {
@@ -54,14 +54,53 @@ public class CursoRepository extends BaseRepository{
 				}
 			}, holder);
 
-			int idCurso = holder.getKey().intValue();
-			curso.setCursId(new Long(idCurso));
+			Long id = holder.getKey().longValue();
+			curso.setCursId(id);
 			
 			return curso;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}catch (DatabaseException e) {
-			throw new DatabaseException(ExceptionType.ERROR, "Erro em banco de dados", e.getMessage());
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public Curso update(Curso curso) {
+		try {
+			sql = SQLReader.from("sql" + File.separator + "curso" + File.separator + "update" + File.separator + "curso.sql");
+			jdbcTemplateMySQL.update(sql,
+					new Object[] { curso.getCursNome(), 
+								   curso.getCursId()});
+			return curso;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public Curso findById(Long id) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"curso"+File.separator+"curso"+File.separator+"curso_by_id.sql");
+			Curso curso = jdbcTemplateMySQL.queryForObject(sql, new BeanPropertyRowMapper<Curso>());
+			return curso;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public Boolean delete(Curso curso) {
+		try {
+			sql = SQLReader.from("sql" + File.separator + "curso" + File.separator + "delete" + File.separator + "curso.sql");
+			jdbcTemplateMySQL.update(sql, curso.getCursId());
+			return Boolean.TRUE;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
 	}
 	

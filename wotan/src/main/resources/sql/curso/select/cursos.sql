@@ -1,3 +1,5 @@
 SELECT * 
 FROM 
-	curso;
+	curso 
+WHERE 
+	curs_excluido = FALSE;
