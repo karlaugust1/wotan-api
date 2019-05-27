@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.wotan.data.enun.ExceptionType;
 import br.com.wotan.data.model.Curso;
 import br.com.wotan.exception.DatabaseException;
+import br.com.wotan.rowmapper.CursoRowMapper;
 import br.com.wotan.util.SQLReader;
 
 @Repository
@@ -30,7 +30,7 @@ public class CursoRepository extends BaseRepository{
 	public List<Curso> findAll() {
 		try {
 			sql = SQLReader.from("sql"+File.separator+"curso"+File.separator+"select"+File.separator+"cursos.sql");
-			List<Curso> cargos = jdbcTemplateMySQL.query(sql, new BeanPropertyRowMapper<>(Curso.class));
+			List<Curso> cargos = jdbcTemplateMySQL.query(sql, new CursoRowMapper());
 			return cargos;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -81,8 +81,8 @@ public class CursoRepository extends BaseRepository{
 
 	public Curso findById(Long id) {
 		try {
-			sql = SQLReader.from("sql"+File.separator+"curso"+File.separator+"curso"+File.separator+"curso_by_id.sql");
-			Curso curso = jdbcTemplateMySQL.queryForObject(sql, new BeanPropertyRowMapper<Curso>());
+			sql = SQLReader.from("sql"+File.separator+"curso"+File.separator+"select"+File.separator+"curso_by_id.sql");
+			Curso curso = jdbcTemplateMySQL.queryForObject(sql, new Object[] {id} , new CursoRowMapper());
 			return curso;
 		} catch (EmptyResultDataAccessException e) {
 			return null;

@@ -71,7 +71,7 @@ public class DisciplinaRepository extends BaseRepository{
 	public Disciplina findById(Long id) {
 		try {
 			sql = SQLReader.from("sql"+File.separator+"disciplina"+File.separator+"select"+File.separator+"disciplina_by_id.sql");
-			Disciplina disciplina = jdbcTemplateMySQL.queryForObject(sql, new DisciplinaRowMapper());
+			Disciplina disciplina = jdbcTemplateMySQL.queryForObject(sql, new Object[] {id}, new DisciplinaRowMapper());
 			return disciplina;
 		} catch (EmptyResultDataAccessException e) {
 			return null;

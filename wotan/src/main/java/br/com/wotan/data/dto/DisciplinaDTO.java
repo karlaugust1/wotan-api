@@ -9,6 +9,6 @@ public class DisciplinaDTO {
 
 	private Long id;
 	private String descricao;
-	private CursoDTO curso;
+	private Long idCurso;
 	
 }
