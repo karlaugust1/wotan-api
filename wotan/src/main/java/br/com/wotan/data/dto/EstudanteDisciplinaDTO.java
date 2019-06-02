@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-public class EstudanteDisciplina {
+public class EstudanteDisciplinaDTO {
 	
 	private Boolean trancado;
 	private LocalDateTime dataTrancamento;

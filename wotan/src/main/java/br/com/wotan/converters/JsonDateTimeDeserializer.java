@@ -1,0 +1,25 @@
+package br.com.wotan.converters;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+public class JsonDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
+
+    private static final long serialVersionUID = 1L;
+
+    protected JsonDateTimeDeserializer() {
+        super(LocalDateTime.class);
+    }
+
+    @Override
+    public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        return LocalDateTime.parse(jp.readValueAs(String.class), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    }
+
+}

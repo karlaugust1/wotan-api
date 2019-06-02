@@ -5,4 +5,6 @@ INNER JOIN
 ON 
 	c.cont_id = p.cont_id 
 WHERE 
-	p.perg_id = ?;
+	p.perg_id = ? 
+AND  
+	p.perg_excluida = FALSE;

@@ -55,7 +55,7 @@ public class ProfessorRepository extends BaseRepository{
 	public Professor findById(Long id) {
 		try {
 			sql = SQLReader.from("sql"+File.separator+"professor"+File.separator+"select"+File.separator+"professor_by_id.sql");
-			Professor professor = jdbcTemplateMySQL.queryForObject(sql, new ProfessorRowMapper());
+			Professor professor = jdbcTemplateMySQL.queryForObject(sql, new Object[] {id}, new ProfessorRowMapper());
 			return professor;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -89,6 +89,32 @@ public class ProfessorRepository extends BaseRepository{
 			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
 		
+	}
+
+	public List<Professor> findTeachersWithNoLink() {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"professor"+File.separator+"select"+File.separator+"professores_with_no_link.sql");
+			List<Professor> professores = jdbcTemplateMySQL.query(sql, new ProfessorRowMapper());
+			return professores;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public List<Professor> findTeachersWithLink(Long id) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"professor"+File.separator+"select"+File.separator+"professores_with_link.sql");
+			List<Professor> professores = jdbcTemplateMySQL.query(sql, new Object[] {id}, new ProfessorRowMapper());
+			return professores;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
 	}
 
 }

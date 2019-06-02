@@ -50,5 +50,17 @@ public class EstudanteController {
 		ServiceResponse result = estudanteService.delete(estudanteDTO);
 		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/estudantes-sem-vinculo", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findStudentsWithNoLink() {
+		ServiceResponse result = estudanteService.findStudentsWithNoLink();
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/estudantes/disciplina/{id}", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findStudentsWithLink(@PathVariable Long id) {
+		ServiceResponse result = estudanteService.findStudentsWithLink(id);
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
 
 }

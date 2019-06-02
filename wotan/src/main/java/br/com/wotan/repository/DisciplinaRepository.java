@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.wotan.data.enun.ExceptionType;
 import br.com.wotan.data.model.Disciplina;
+import br.com.wotan.data.model.EstudanteDisciplina;
+import br.com.wotan.data.model.ProfessorDisciplina;
 import br.com.wotan.exception.DatabaseException;
 import br.com.wotan.rowmapper.DisciplinaRowMapper;
 import br.com.wotan.util.SQLReader;
@@ -104,6 +106,78 @@ public class DisciplinaRepository extends BaseRepository{
 		} catch (DatabaseException e) {
 			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
+	}
+	
+	public Boolean deleteEstudanteDisciplina(Long id) {
+		try {
+			sql = SQLReader.from("sql" + File.separator + "disciplina" + File.separator + "delete" + File.separator + "estudante_disciplina.sql");
+			jdbcTemplateMySQL.update(sql, id);
+			return Boolean.TRUE;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+	
+	public EstudanteDisciplina insertEstudanteDisciplina(EstudanteDisciplina estudanteDisciplina) {
+		try {
+			sql = SQLReader.from("sql" + File.separator + "disciplina" + File.separator + "insert" + File.separator + "estudante_disciplina.sql");
+
+			jdbcTemplateMySQL.update(new PreparedStatementCreator() {
+				@Override
+				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+					ps.setObject(1, estudanteDisciplina.getEstudante().getEstuId());
+					ps.setObject(2, estudanteDisciplina.getDisciplina().getDiscId());
+					ps.setObject(3, estudanteDisciplina.getEsdiTrancado());
+					ps.setObject(4, estudanteDisciplina.getEsdiDataMatricula().toString());
+					return ps;
+				}
+			});
+			return estudanteDisciplina;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public Boolean deleteProfessorDisciplina(Long id) {
+		try {
+			sql = SQLReader.from("sql" + File.separator + "disciplina" + File.separator + "delete" + File.separator + "professor_disciplina.sql");
+			jdbcTemplateMySQL.update(sql, id);
+			return Boolean.TRUE;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+		
+	}
+
+	public ProfessorDisciplina insertProfessorDisciplina(ProfessorDisciplina professorDisciplina) {
+		
+		try {
+			sql = SQLReader.from("sql" + File.separator + "disciplina" + File.separator + "insert" + File.separator + "professor_disciplina.sql");
+
+			jdbcTemplateMySQL.update(new PreparedStatementCreator() {
+				@Override
+				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+					ps.setObject(1, professorDisciplina.getProfessor().getProfId());
+					ps.setObject(2, professorDisciplina.getDisciplina().getDiscId());
+					ps.setObject(3, professorDisciplina.getPrdiDataInicio().toString());
+					return ps;
+				}
+			});
+			return professorDisciplina;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+		
 	}
 
 }

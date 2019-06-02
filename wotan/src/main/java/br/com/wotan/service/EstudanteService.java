@@ -42,7 +42,7 @@ public class EstudanteService {
 		
 		if(estudante.getUsuario().getUsuaRg().isEmpty()) {
 			throw new BusinessException(ExceptionType.VALIDATION, "RG do estudante é obrigatório", "RG do estudante é obrigatório");
-		}
+		}	
 		
 		if(estudante.getUsuario().getUsuaDataNascimento() == null) {
 			throw new BusinessException(ExceptionType.VALIDATION, "Data de nascimento do estudante é obrigatório", "Data de estudante do professor é obrigatório");
@@ -55,6 +55,7 @@ public class EstudanteService {
 		if(estudante.getEstuDataMatricula() == null) {
 			throw new BusinessException(ExceptionType.VALIDATION, "Data de matrícula do estudante é obrigatório", "Data de matrícula do estudante é obrigatório");
 		}
+		
 		
 		estudante.getUsuario().setUsuaSenha(estudante.getUsuario().getUsuaRg());
 		
@@ -163,6 +164,30 @@ public class EstudanteService {
 		estudanteRepository.delete(estudante);
 		
 		return new ServiceResponse(ExceptionType.SUCCESS, "Estudante excluído com sucesso!", "Estudante excluído com sucesso!", null);
+	}
+
+	public ServiceResponse findStudentsWithNoLink() {
+		
+		List<Estudante> estudantes = estudanteRepository.findStudentsWithNoLink();
+		
+		Map<String, Object> retornoObjeto = new HashMap<>();
+		retornoObjeto.put("estudantes", new EstudanteDTOMapper().toDTO(estudantes));
+
+		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", retornoObjeto);
+
+		return response;
+	}
+	
+	public ServiceResponse findStudentsWithLink(Long id) {
+		
+		List<Estudante> estudantes = estudanteRepository.findStudentsWithLink(id);
+		
+		Map<String, Object> retornoObjeto = new HashMap<>();
+		retornoObjeto.put("estudantes", new EstudanteDTOMapper().toDTO(estudantes));
+
+		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", retornoObjeto);
+
+		return response;
 	}
 
 }

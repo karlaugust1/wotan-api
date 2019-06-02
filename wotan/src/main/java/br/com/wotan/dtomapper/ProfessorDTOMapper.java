@@ -13,6 +13,13 @@ import br.com.wotan.data.model.Professor;
 public class ProfessorDTOMapper {
 	
 	private ModelMapper modelMapper = new ModelMapper();
+	
+	public List<Professor> fromDTO(List<ProfessorDTO> professoresDTO) {
+		modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		Type typeList = new TypeToken<List<Professor>>() {}.getType();
+		return modelMapper.map(professoresDTO, typeList);
+	}
 
 	public Professor fromDTO(ProfessorDTO professorDTO) {
 		modelMapper = new ModelMapper();

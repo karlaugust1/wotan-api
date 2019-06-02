@@ -14,12 +14,13 @@ import br.com.wotan.data.model.Disciplina;
 public class DisciplinaDTOMapper {
 	
 	private ModelMapper modelMapper = new ModelMapper();
-	private PropertyMap<Disciplina, DisciplinaDTO> mappingDisciplina = new PropertyMap<Disciplina, DisciplinaDTO>() {
+	private PropertyMap<Disciplina, DisciplinaDTO> mapping = new PropertyMap<Disciplina, DisciplinaDTO>() {
 		protected void configure() {
 			map().setIdCurso(source.getCurso().getCursId());
+			map().setCurso(source.getCurso().getCursNome());
 		}
 	};
-	private PropertyMap<DisciplinaDTO, Disciplina> mappingDisciplinaDTO = new PropertyMap<DisciplinaDTO, Disciplina>() {
+	private PropertyMap<DisciplinaDTO, Disciplina> mappingDTO = new PropertyMap<DisciplinaDTO, Disciplina>() {
 		protected void configure() {
 			map().getCurso().setCursId(source.getIdCurso());
 		}
@@ -28,20 +29,21 @@ public class DisciplinaDTOMapper {
 	public Disciplina fromDTO(DisciplinaDTO disciplinaDTO) {
 		modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		modelMapper.addMappings(mappingDisciplinaDTO);
+		modelMapper.addMappings(mappingDTO);
 		return modelMapper.map(disciplinaDTO, Disciplina.class);
 	}
 	
 	public DisciplinaDTO toDTO(Disciplina disciplina) {
 		modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		modelMapper.addMappings(mappingDisciplina);
+		modelMapper.addMappings(mapping);
 		return modelMapper.map(disciplina, DisciplinaDTO.class);
 	}
 	
 	public List<DisciplinaDTO> toDTO(List<Disciplina> disciplinas) {
 		modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		modelMapper.addMappings(mapping);	
 	    Type typeList = new TypeToken<List<DisciplinaDTO>>() {}.getType();
 		return modelMapper.map(disciplinas, typeList);
 	}

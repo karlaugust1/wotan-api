@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ProfessorDisciplinaDTO {
 	
-	private ProfessorDTO professor;
-	private DisciplinaDTO disciplina;
 	private LocalDateTime dataInicio;
-	private LocalDateTime dataFim;
 
 }

@@ -11,7 +11,10 @@ public class ConteudoDTO {
 	private String titulo;
 	private String descricao;
 	private Integer bimestre;
-	private ProfessorDTO professor;
-	private DisciplinaDTO disciplina;
+	private Long idProfessor;
+	private Long idUsuario;
+	private String nome;
+	private Long idDisciplina;
+	private String disciplina;
 
 }

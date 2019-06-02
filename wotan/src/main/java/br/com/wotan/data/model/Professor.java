@@ -12,5 +12,6 @@ public class Professor {
 	private Long profId;
 	private Usuario usuario;
 	private List<Disciplina> disciplinas;
+	private ProfessorDisciplina professorDisciplina;
 	
 }

@@ -29,28 +29,31 @@ public class BusinessControllerAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	public final ResponseEntity<BusinessResponse> handleAllExceptions(BusinessException ex, WebRequest request) {
+		ex.printStackTrace();
 		BusinessResponse detalhes = new BusinessResponse(ex.getExceptionType(), ex.getMessage(), ex.getDetails(), date);
 		return new ResponseEntity<>(detalhes, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-/*	@ExceptionHandler(DatabaseException.class)
+	@ExceptionHandler(DatabaseException.class)
 	public final ResponseEntity<BusinessResponse> handleAllExceptions(DatabaseException ex, WebRequest request) {
-		BusinessResponse detalhes = new BusinessResponse(ex.getExceptionType(), ex.getMessage(), ex.getMsgException(),
-				date);
+		ex.printStackTrace();
+		BusinessResponse detalhes = new BusinessResponse(ex.getExceptionType(), ex.getMessage(), ex.getMessage(), date);
 		return new ResponseEntity<>(detalhes, HttpStatus.INTERNAL_SERVER_ERROR);
-	}*/
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public final ResponseEntity<BusinessResponse> handleConflict(Exception e, HttpServletResponse response)
+	public final ResponseEntity<BusinessResponse> handleConflict(Exception ex, HttpServletResponse response)
 			throws IOException {
-		BusinessResponse detalhes = new BusinessResponse(ExceptionType.ERROR, e.getMessage(), "", date);
+		ex.printStackTrace();
+		BusinessResponse detalhes = new BusinessResponse(ExceptionType.ERROR, ex.getMessage(), "", date);
 		return new ResponseEntity<>(detalhes, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ex.printStackTrace();
 		BusinessResponse detalhes = new BusinessResponse(ExceptionType.ERROR, "Ocorreu interno no sistema! Por favor entre em contato", "", date);
 		return new ResponseEntity<>(detalhes, HttpStatus.BAD_REQUEST);
 	}
@@ -63,7 +66,7 @@ public class BusinessControllerAdvice extends ResponseEntityExceptionHandler {
 		fields.forEach(field ->{
 			builderError.append(field.getDefaultMessage()+"<br>");
 		});
-		
+		ex.printStackTrace();
         BusinessResponse detalhes = new BusinessResponse(ExceptionType.ERROR, builderError.toString(), "", date);
 		return new ResponseEntity<>(detalhes, HttpStatus.BAD_REQUEST);
     }

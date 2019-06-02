@@ -78,10 +78,10 @@ public class PerguntaRepository extends BaseRepository {
 		}
 	}
 
-	public Boolean delete(final Pergunta pergunta) {
+	public Boolean delete(final Long pergunta) {
 		try {
 			sql = SQLReader.from("sql" + File.separator + "pergunta" + File.separator + "delete" + File.separator + "pergunta.sql");
-			jdbcTemplateMySQL.update(sql, pergunta.getPergId());
+			jdbcTemplateMySQL.update(sql, pergunta);
 			return Boolean.TRUE;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -93,7 +93,7 @@ public class PerguntaRepository extends BaseRepository {
 
 	public List<Pergunta> findByTeacher(Long id) {
 		try {
-			sql = SQLReader.from("sql"+File.separator+"solicitacao"+File.separator+"select"+File.separator+"perguntas_by_teacher.sql");
+			sql = SQLReader.from("sql"+File.separator+"pergunta"+File.separator+"select"+File.separator+"perguntas_by_teacher.sql");
 			List<Pergunta> perguntas = jdbcTemplateMySQL.query(sql, new Object[] { id }, new PerguntaRowMapper());
 			return perguntas;
 		} catch (EmptyResultDataAccessException e) {
@@ -105,7 +105,7 @@ public class PerguntaRepository extends BaseRepository {
 
 	public Pergunta findById(Long id) {
 		try {
-			sql = SQLReader.from("sql"+File.separator+"solicitacao"+File.separator+"select"+File.separator+"pergunta_by_id.sql");
+			sql = SQLReader.from("sql"+File.separator+"pergunta"+File.separator+"select"+File.separator+"pergunta_by_id.sql");
 			Pergunta pergunta = jdbcTemplateMySQL.queryForObject(sql, new Object[] { id }, new PerguntaRowMapper());
 			return pergunta;
 		} catch (EmptyResultDataAccessException e) {

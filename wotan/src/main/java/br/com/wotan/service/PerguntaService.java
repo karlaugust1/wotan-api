@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.wotan.data.dto.PerguntaDTO;
 import br.com.wotan.data.enun.ExceptionType;
+import br.com.wotan.data.model.Alternativa;
 import br.com.wotan.data.model.Pergunta;
 import br.com.wotan.dtomapper.PerguntaDTOMapper;
 import br.com.wotan.exception.BusinessException;
+import br.com.wotan.repository.AlternativaRepository;
 import br.com.wotan.repository.PerguntaRepository;
 import br.com.wotan.util.ServiceResponse;
 
@@ -22,6 +24,8 @@ public class PerguntaService {
 	
 	@Autowired
 	PerguntaRepository perguntaRepository;
+	@Autowired
+	AlternativaRepository alternativaRepository;
 
 	public ServiceResponse insert(PerguntaDTO perguntaDTO) {
 		
@@ -50,6 +54,25 @@ public class PerguntaService {
 		pergunta.setPergVisivel(Boolean.TRUE);
 		
 		pergunta = perguntaRepository.insert(pergunta);
+		
+		Boolean alternativaCorreta = false;
+		for (Alternativa alternativa : pergunta.getAlternativas()) {
+			if(alternativa.getAlteDescricao().isEmpty()) {
+				throw new BusinessException(ExceptionType.VALIDATION, "Descrição de uma alternativa é obrigatória", "Descrição de uma alternativa é obrigatória");
+			}
+			if(alternativa.getAlteCorreta() != null)
+				if(alternativa.getAlteCorreta())			
+					alternativaCorreta = true;
+		};
+		
+		if(!alternativaCorreta) {
+			throw new BusinessException(ExceptionType.VALIDATION, "Ao menos uma alternativa correta é obrigatório", "Ao menos uma alternativa correta é obrigatório");
+		}
+		
+		for (Alternativa alternativa : pergunta.getAlternativas()) {
+			alternativa.setPergunta(pergunta);
+			alternativaRepository.insert(alternativa);
+		}
 		
 		Map<String, Object> retornoObjeto = new HashMap<String, Object>();
 		
@@ -92,28 +115,32 @@ public class PerguntaService {
 		
 		if(pergunta.getPergVisivel() == null) {
 			throw new BusinessException(ExceptionType.VALIDATION, "Atributo Visivel da pergunta é obrigatório", "Atributo Visivel da pergunta é obrigatório");
-		}
+		}		
 				
 		pergunta = perguntaRepository.update(pergunta);
+		
+		for (Alternativa alternativa : pergunta.getAlternativas()) {
+			alternativaRepository.update(alternativa);
+			
+		}
 		
 		Map<String, Object> retornoObjeto = new HashMap<String, Object>();
 		
 		retornoObjeto.put("pergunta", new PerguntaDTOMapper().toDTO(pergunta));
 
-		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Pergunta salva com sucesso!", "Pergunta salva com sucesso!", retornoObjeto);
+		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Pergunta atualizada com sucesso!", "Pergunta atualizada com sucesso!", retornoObjeto);
 
 		return response;
 	}
 	
-	public ServiceResponse delete(PerguntaDTO perguntaDTO) {
+	public ServiceResponse delete(Long id) {
 		
-		Pergunta pergunta = new PerguntaDTOMapper().fromDTO(perguntaDTO); 
 		
-		if(pergunta.getPergId() == null) {
+		if(id == null) {
 			throw new BusinessException(ExceptionType.VALIDATION, "Identificador da pergunta é obrigatório", "Identificador da pergunta é obrigatório");
 		}
 		
-		perguntaRepository.delete(pergunta);
+		perguntaRepository.delete(id);
 		
 		return new ServiceResponse(ExceptionType.SUCCESS, "Pergunta excluída com sucesso!", "Pergunta excluída com sucesso!", null);
 	}
@@ -125,6 +152,10 @@ public class PerguntaService {
 		}
 		
 		List<Pergunta> perguntas = perguntaRepository.findByTeacher(id);
+		
+		perguntas.forEach(pergunta -> {
+			pergunta.setAlternativas(alternativaRepository.findByQuestion(pergunta.getPergId()));
+		});
 		
 		Map<String, Object> objetoRetorno = new HashMap<>();
 		
@@ -140,6 +171,8 @@ public class PerguntaService {
 		}
 		
 		Pergunta pergunta = perguntaRepository.findById(id);
+		
+		pergunta.setAlternativas(alternativaRepository.findByQuestion(pergunta.getPergId()));
 		
 		Map<String, Object> objetoRetorno = new HashMap<>();
 		

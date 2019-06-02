@@ -51,4 +51,16 @@ public class ProfessorController {
 		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/professores-sem-vinculo", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findTeachersWithNoLink() {
+		ServiceResponse result = professorService.findTeachersWithNoLink();
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/professores/disciplina/{id}", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findTeachersWithLink(@PathVariable Long id) {
+		ServiceResponse result = professorService.findTeachersWithLink(id);
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
+	
 }

@@ -10,6 +10,6 @@ public class AlternativaDTO {
 	private Long id;
 	private String descricao;
 	private Boolean correta;
-	private PerguntaDTO pergunta;
+	private Long idPergunta;
 	
 }

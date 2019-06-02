@@ -72,7 +72,7 @@ public class EstudanteRepository extends BaseRepository{
 	public Estudante findById(Long id) {
 		try {
 			sql = SQLReader.from("sql"+File.separator+"estudante"+File.separator+"select"+File.separator+"estudante_by_id.sql");
-			Estudante estudante = jdbcTemplateMySQL.queryForObject(sql, new EstudanteRowMapper());
+			Estudante estudante = jdbcTemplateMySQL.queryForObject(sql, new Object[] {id},new EstudanteRowMapper());
 			return estudante;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -103,6 +103,32 @@ public class EstudanteRepository extends BaseRepository{
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public List<Estudante> findStudentsWithNoLink() {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"estudante"+File.separator+"select"+File.separator+"estudantes_with_no_link.sql");
+			List<Estudante> estudantes = jdbcTemplateMySQL.query(sql, new EstudanteRowMapper());
+			return estudantes;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+	
+	public List<Estudante> findStudentsWithLink(Long id) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"estudante"+File.separator+"select"+File.separator+"estudantes_with_link.sql");
+			List<Estudante> estudantes = jdbcTemplateMySQL.query(sql, new Object[] {id}, new EstudanteRowMapper());
+			return estudantes;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
 			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
 	}

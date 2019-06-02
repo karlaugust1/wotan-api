@@ -34,8 +34,8 @@ public class PerguntaController {
 	}
 	
 	@DeleteMapping(value = "/perguntas", produces = "application/json")
-	public ResponseEntity<ServiceResponse> delete(@RequestBody PerguntaDTO pergunta) {
-		ServiceResponse result = perguntaService.delete(pergunta);
+	public ResponseEntity<ServiceResponse> delete(@RequestBody Long id) {
+		ServiceResponse result = perguntaService.delete(id);
 		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
 	}
 	

@@ -128,7 +128,7 @@ public class ProfessorService {
 		List<Professor> professores = professorRepository.findAll();
 		
 		Map<String, Object> retornoObjeto = new HashMap<>();
-		retornoObjeto.put("cursos", new ProfessorDTOMapper().toDTO(professores));
+		retornoObjeto.put("professores", new ProfessorDTOMapper().toDTO(professores));
 
 		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", retornoObjeto);
 
@@ -149,6 +149,31 @@ public class ProfessorService {
 
 		return response;
 		
+	}
+
+	public ServiceResponse findTeachersWithNoLink() {
+		
+		List<Professor> professores = professorRepository.findTeachersWithNoLink();
+		
+		Map<String, Object> retornoObjeto = new HashMap<>();
+		retornoObjeto.put("professores", new ProfessorDTOMapper().toDTO(professores));
+
+		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", retornoObjeto);
+
+		return response;
+		
+	}
+
+	public ServiceResponse findTeachersWithLink(Long id) {
+		
+		List<Professor> professores = professorRepository.findTeachersWithLink(id);
+		
+		Map<String, Object> retornoObjeto = new HashMap<>();
+		retornoObjeto.put("professores", new ProfessorDTOMapper().toDTO(professores));
+
+		ServiceResponse response = new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", retornoObjeto);
+
+		return response;
 	}
 
 }
