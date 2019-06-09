@@ -16,8 +16,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.wotan.data.enun.ExceptionType;
+import br.com.wotan.data.model.Professor;
 import br.com.wotan.data.model.Usuario;
 import br.com.wotan.exception.DatabaseException;
+import br.com.wotan.rowmapper.EstudanteRowMapper;
+import br.com.wotan.rowmapper.ProfessorRowMapper;
 import br.com.wotan.util.SQLReader;
 
 @Repository
@@ -71,4 +74,5 @@ public class UsuarioRepository extends BaseRepository {
 			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
 	}
+
 }

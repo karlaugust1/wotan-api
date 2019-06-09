@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.wotan.data.enun.ExceptionType;
 import br.com.wotan.data.model.Estudante;
+import br.com.wotan.data.model.Usuario;
 import br.com.wotan.exception.DatabaseException;
 import br.com.wotan.rowmapper.EstudanteRowMapper;
 import br.com.wotan.util.SQLReader;
@@ -125,6 +126,19 @@ public class EstudanteRepository extends BaseRepository{
 			sql = SQLReader.from("sql"+File.separator+"estudante"+File.separator+"select"+File.separator+"estudantes_with_link.sql");
 			List<Estudante> estudantes = jdbcTemplateMySQL.query(sql, new Object[] {id}, new EstudanteRowMapper());
 			return estudantes;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public Estudante findStudentByRegisterNumber(String matricula) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"estudante"+File.separator+"select"+File.separator+"estudante_by_register_number.sql");
+			Estudante estudante = jdbcTemplateMySQL.queryForObject(sql, new Object[] { matricula }, new EstudanteRowMapper());
+			return estudante;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}catch (DatabaseException e) {

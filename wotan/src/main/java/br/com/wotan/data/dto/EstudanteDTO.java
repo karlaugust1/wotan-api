@@ -26,5 +26,6 @@ public class EstudanteDTO {
 	@JsonDeserialize(using = JsonDateTimeDeserializer.class)
 	@JsonSerialize(using = JsonDateTimeSerializer.class) 
 	private LocalDateTime dataNascimento;
+	private String senha;
 
 }
