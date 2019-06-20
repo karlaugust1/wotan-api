@@ -50,5 +50,17 @@ public class PerguntaController {
 		ServiceResponse result = perguntaService.findByTeacher(id);
 		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/perguntas/disciplina/{id}/estudante/{idStudent}/{respondida}", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findByDiscipline(@PathVariable Long id, @PathVariable Long idStudent, @PathVariable Boolean respondida) {
+		ServiceResponse result = perguntaService.findByDiscipline(id, idStudent, respondida);
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/perguntas/estudante/{id}/{respondida}", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findAllQUestionsByStudent(@PathVariable Long id, @PathVariable Boolean respondida) {
+		ServiceResponse result = perguntaService.findAllQUestionsByStudent(id, respondida);
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
 
 }

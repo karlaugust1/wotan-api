@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.wotan.data.enun.ExceptionType;
 import br.com.wotan.data.model.Estudante;
-import br.com.wotan.data.model.Usuario;
 import br.com.wotan.exception.DatabaseException;
 import br.com.wotan.rowmapper.EstudanteRowMapper;
 import br.com.wotan.util.SQLReader;

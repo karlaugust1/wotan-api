@@ -14,5 +14,6 @@ public class HistoricoPergunta {
 	private LocalDateTime hipeDataRegistro;
 	private Estudante estudante;
 	private Pergunta pergunta;
+	private Alternativa alternativa;
 
 }

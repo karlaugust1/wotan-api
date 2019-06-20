@@ -181,4 +181,55 @@ public class PerguntaService {
 		return new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", objetoRetorno);
 	}
 
+	public ServiceResponse findAllQUestionsByStudent(Long id, Boolean respondida) {
+		
+		if(id == null || id <= 0) {
+			throw new BusinessException(ExceptionType.VALIDATION, "Identificador do estudante é obrigatório", "Identificador do estudante é obrigatório");
+		}
+		
+		if(respondida == null) {
+			respondida = Boolean.FALSE;
+		}
+		
+		List<Pergunta> perguntas = perguntaRepository.findAllQUestionsByStudent(id, respondida);
+		
+		perguntas.forEach(pergunta -> {
+			pergunta.setAlternativas(alternativaRepository.findByQuestion(pergunta.getPergId()));
+		});
+		
+		Map<String, Object> objetoRetorno = new HashMap<>();
+		
+		objetoRetorno.put("perguntas", new PerguntaDTOMapper().toDTO(perguntas));
+		
+		return new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", objetoRetorno);
+	}
+
+	public ServiceResponse findByDiscipline(Long id, Long idStudent, Boolean respondida) {
+		
+		if(id == null || id <= 0) {
+			throw new BusinessException(ExceptionType.VALIDATION, "Identificador da disciplina é obrigatório", "Identificador da disciplina é obrigatório");
+		}
+		
+		if(idStudent == null || idStudent <= 0) {
+			throw new BusinessException(ExceptionType.VALIDATION, "Identificador do estudante é obrigatório", "Identificador do estudante é obrigatório");
+		}
+		
+		if(respondida == null) {
+			respondida = Boolean.FALSE;
+		}
+		
+		List<Pergunta> perguntas = perguntaRepository.findByDiscipline(id, idStudent, respondida);
+		
+		perguntas.forEach(pergunta -> {
+			pergunta.setAlternativas(alternativaRepository.findByQuestion(pergunta.getPergId()));
+		});
+		
+		Map<String, Object> objetoRetorno = new HashMap<>();
+		
+		objetoRetorno.put("perguntas", new PerguntaDTOMapper().toDTO(perguntas));
+		
+		return new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", objetoRetorno);
+		
+	}
+
 }

@@ -115,4 +115,28 @@ public class PerguntaRepository extends BaseRepository {
 		}
 	}
 
+	public List<Pergunta> findAllQUestionsByStudent(Long id, Boolean answered) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"pergunta"+File.separator+"select"+File.separator+"perguntas_by_student.sql");
+			List<Pergunta> perguntas = jdbcTemplateMySQL.query(sql, new Object[] { id, answered, id }, new PerguntaRowMapper());
+			return perguntas;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
+	public List<Pergunta> findByDiscipline(Long id, Long idStudent, Boolean answered) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"pergunta"+File.separator+"select"+File.separator+"perguntas_by_discipline.sql");
+			List<Pergunta> perguntas = jdbcTemplateMySQL.query(sql, new Object[] { idStudent, answered, idStudent, id }, new PerguntaRowMapper());
+			return perguntas;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
 }
