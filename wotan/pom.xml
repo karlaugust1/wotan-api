@@ -10,6 +10,7 @@
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<spring.version>4.3.10.RELEASE</spring.version>
 		<jackson.version>1.9.13</jackson.version>
+		<tomcat.version>2.1.6.RELEASE</tomcat.version>
 	</properties>
 	<dependencies>
 		<!-- Spring MVC Dependency -->
@@ -105,16 +106,25 @@
 			<version>1.16.20</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- ModelMapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.2.0</version>
 		</dependency>
-		
+
+		<!-- Tomcat -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+			<version>${tomcat.version}</version>
+		</dependency>
+
 	</dependencies>
 	<build>
+		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -27,5 +27,6 @@ public class ProfessorDTO {
 	@JsonDeserialize(using = JsonDateTimeDeserializer.class)
 	@JsonSerialize(using = JsonDateTimeSerializer.class) 
 	private LocalDateTime dataInicio;
+	private String senha;
 	
 }

@@ -13,11 +13,13 @@ public class PerguntaRowMapper implements RowMapper<Pergunta> {
 	
 	@Override
 	public Pergunta mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
 		Pergunta pergunta = (new BeanPropertyRowMapper<>(Pergunta.class)).mapRow(rs, rowNum);
 		Conteudo conteudo = (new BeanPropertyRowMapper<>(Conteudo.class)).mapRow(rs, rowNum);
 		
 		pergunta.setConteudo(conteudo);
 		return pergunta;
+		
 	}
 
 }

@@ -117,4 +117,17 @@ public class ProfessorRepository extends BaseRepository{
 		}
 	}
 
+	public Professor findTeacherByCPF(String cpf) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"professor"+File.separator+"select"+File.separator+"professor_by_cpf.sql");
+			Professor professor = jdbcTemplateMySQL.queryForObject(sql, new Object[] { cpf }, new ProfessorRowMapper());
+			return professor;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}catch (DatabaseException e) {
+			e.printStackTrace();
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
+
 }

@@ -62,5 +62,11 @@ public class PerguntaController {
 		ServiceResponse result = perguntaService.findAllQUestionsByStudent(id, respondida);
 		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/perguntas/professor/{id}/historico", produces = "application/json")
+	public ResponseEntity<ServiceResponse> findByTeacherWithHistoric(@PathVariable Long id) {
+		ServiceResponse result = perguntaService.findByTeacherWithHistoric(id);
+		return new ResponseEntity<ServiceResponse>(result, HttpStatus.OK);
+	}
 
 }

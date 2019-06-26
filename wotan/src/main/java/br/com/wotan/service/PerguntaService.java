@@ -16,6 +16,7 @@ import br.com.wotan.data.model.Pergunta;
 import br.com.wotan.dtomapper.PerguntaDTOMapper;
 import br.com.wotan.exception.BusinessException;
 import br.com.wotan.repository.AlternativaRepository;
+import br.com.wotan.repository.HistoricoPerguntaRepository;
 import br.com.wotan.repository.PerguntaRepository;
 import br.com.wotan.util.ServiceResponse;
 
@@ -26,6 +27,8 @@ public class PerguntaService {
 	PerguntaRepository perguntaRepository;
 	@Autowired
 	AlternativaRepository alternativaRepository;
+	@Autowired
+	HistoricoPerguntaRepository historicoPerguntaRepository;
 
 	public ServiceResponse insert(PerguntaDTO perguntaDTO) {
 		
@@ -53,8 +56,6 @@ public class PerguntaService {
 		pergunta.setPergAtiva(Boolean.TRUE);
 		pergunta.setPergVisivel(Boolean.TRUE);
 		
-		pergunta = perguntaRepository.insert(pergunta);
-		
 		Boolean alternativaCorreta = false;
 		for (Alternativa alternativa : pergunta.getAlternativas()) {
 			if(alternativa.getAlteDescricao().isEmpty()) {
@@ -65,9 +66,15 @@ public class PerguntaService {
 					alternativaCorreta = true;
 		};
 		
+		if(pergunta.getAlternativas().size() == 0) {
+			alternativaCorreta = true;
+		}
+		
 		if(!alternativaCorreta) {
 			throw new BusinessException(ExceptionType.VALIDATION, "Ao menos uma alternativa correta é obrigatório", "Ao menos uma alternativa correta é obrigatório");
 		}
+		
+		pergunta = perguntaRepository.insert(pergunta);
 		
 		for (Alternativa alternativa : pergunta.getAlternativas()) {
 			alternativa.setPergunta(pergunta);
@@ -230,6 +237,27 @@ public class PerguntaService {
 		
 		return new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", objetoRetorno);
 		
+	}
+
+	public ServiceResponse findByTeacherWithHistoric(Long id) {
+		
+		if(id == null || id <= 0) {
+			throw new BusinessException(ExceptionType.VALIDATION, "Identificador do professor é obrigatório", "Identificador do professor é obrigatório");
+		}
+		
+		List<Pergunta> perguntas = perguntaRepository.findByTeacher(id);
+		
+		perguntas.forEach(pergunta -> {
+			pergunta.setAlternativas(alternativaRepository.findByQuestion(pergunta.getPergId()));
+			pergunta.setHistoricoPerguntas(historicoPerguntaRepository.findByQuestion(pergunta.getPergId()));
+		});
+		
+		
+		Map<String, Object> objetoRetorno = new HashMap<>();
+		
+		objetoRetorno.put("perguntas", new PerguntaDTOMapper().toDTO(perguntas));
+		
+		return new ServiceResponse(ExceptionType.SUCCESS, "Consulta realizada com sucesso", "Consulta realizada com sucesso", objetoRetorno);
 	}
 
 }

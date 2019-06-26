@@ -138,5 +138,17 @@ public class PerguntaRepository extends BaseRepository {
 			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
 		}
 	}
+	
+	public List<Pergunta> findAnswerdQuerionsByStudent(Long id) {
+		try {
+			sql = SQLReader.from("sql"+File.separator+"pergunta"+File.separator+"select"+File.separator+"perguntas_respondidas_by_student.sql");
+			List<Pergunta> perguntas = jdbcTemplateMySQL.query(sql, new Object[] { id }, new PerguntaRowMapper());
+			return perguntas;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		} catch (DatabaseException e) {
+			throw new DatabaseException(ExceptionType.ERROR, "Erro ocorrido no banco de dados", e.getMessage());
+		}
+	}
 
 }

@@ -8,7 +8,9 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
 
+import br.com.wotan.data.dto.HistoricoPerguntaDTO;
 import br.com.wotan.data.dto.PerguntaDTO;
+import br.com.wotan.data.model.HistoricoPergunta;
 import br.com.wotan.data.model.Pergunta;
 
 public class PerguntaDTOMapper {
@@ -31,6 +33,18 @@ public class PerguntaDTOMapper {
 			map().setPergDataCriacao(source.getDataCriacao());
 			map().setPergDataLimite(source.getDataLimite());
 			skip().getConteudo().getProfessor().getUsuario().setUsuaDataNascimento(null);
+			skip().getConteudo().getProfessor().setProfessorDisciplina(null);
+		}
+	};
+	
+	private PropertyMap<HistoricoPergunta, HistoricoPerguntaDTO> mappingHistoricoPerguntaDTO = new PropertyMap<HistoricoPergunta, HistoricoPerguntaDTO>() {
+		protected void configure() {
+			map().setAlternativa(source.getAlternativa().getAlteId());
+			map().setEstudante(source.getEstudante().getEstuId());
+			map().setNomeEstudante(source.getEstudante().getUsuario().getUsuaNome());
+			map().setMatricula(source.getEstudante().getEstuMatricula());
+			map().setDataResposta(source.getHipeDataRegistro());
+			map().setPergunta(source.getPergunta().getPergId());
 		}
 	};
 
@@ -45,6 +59,7 @@ public class PerguntaDTOMapper {
 		modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		modelMapper.addMappings(mapping);
+		modelMapper.addMappings(mappingHistoricoPerguntaDTO);
 	    Type typeList = new TypeToken<List<PerguntaDTO>>() {}.getType();
 		return modelMapper.map(perguntas, typeList);
 	}

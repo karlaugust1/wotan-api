@@ -4,6 +4,8 @@ package br.com.wotan.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
  
 /*
  * ATTENTION: SQL file must not contain column names, etc. including comment signs (#, --, /* etc.)
@@ -22,10 +24,15 @@ public class SQLReader {
          
         try {
         	
-        	ClassLoader classLoader = new SQLReader().getClass().getClassLoader();
-    		File file = new File(classLoader.getResource(path).getFile());
+//        	ClassLoader classLoader = new SQLReader().getClass().getClassLoader();
+        	
+        	InputStream inputStream = 
+        			new SQLReader().getClass().getClassLoader().getResourceAsStream(path);
+        		   BufferedReader br = new BufferedReader(new InputStreamReader(inputStream ));
+        	
+/*    		File file = new File(classLoader.getResource(path).getFile());
             FileReader fr =     new FileReader(file);       
-            BufferedReader br = new BufferedReader(fr);  
+            BufferedReader br = new BufferedReader(fr);*/  
        
             //read the SQL file line by line
             while((queryLine = br.readLine()) != null)  
