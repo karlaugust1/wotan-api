@@ -8,7 +8,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
-		<spring.version>4.3.10.RELEASE</spring.version>
+		<spring.version>5.3.19</spring.version>
 		<jackson.version>1.9.13</jackson.version>
 		<tomcat.version>2.1.6.RELEASE</tomcat.version>
 	</properties>
